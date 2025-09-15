@@ -6,8 +6,8 @@ BOOTIMG:=/usr/local/grub/lib/grub/i386-pc/boot.img
 GRUBLOC:=/usr/local/grub/bin/
 else
 PREFIX:=
-BOOTIMG:=/usr/lib/grub/i386-pc/boot.img
-GRUBLOC :=
+BOOTIMG:=/usr/local/grub/lib/grub/i386-pc/boot.img
+GRUBLOC :=/usr/local/grub/bin/
 endif
 
 CC := $(PREFIX)gcc
@@ -23,6 +23,8 @@ SDIR = src
 
 OBJS = \
 	kernel_main.o \
+	terminal.o \
+	rprintf.o \
 
 # Make sure to keep a blank line here after OBJS list
 
