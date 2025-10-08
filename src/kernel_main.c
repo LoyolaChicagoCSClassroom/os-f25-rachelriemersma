@@ -13,8 +13,9 @@ void main() {
     load_gdt();
     init_idt();
     
-    esp_printf(putc, "Keyboard Driver Initialized\r\n");
-    esp_printf(putc, "Start typing...\r\n\r\n");
+    for (int i = 0; i < 100; i++) {
+        esp_printf(putc, "This is line %d\n", i);
+    }
     
     asm("sti");
     
