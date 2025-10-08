@@ -13,10 +13,6 @@ void main() {
     load_gdt();
     init_idt();
     
-    for (int i = 0; i < 100; i++) {
-        esp_printf(putc, "This is line %d\n", i);
-    }
-    
     asm("sti");
     
     while(1) {
