@@ -384,9 +384,8 @@ __attribute__((interrupt)) void pit_handler(struct interrupt_frame* frame)
 
 __attribute__((interrupt)) void keyboard_handler(struct interrupt_frame* frame)
 {
-    asm("cli");
-    /* do something */
-    outb(0x20,0x20);
+    extern void keyboard_handler_main(void);
+    keyboard_handler_main();
 }
 
 
