@@ -2,6 +2,7 @@
 #include "rprintf.h"
 
 extern void putc(int data);
+extern void outb(uint16_t port, uint8_t val);
 
 unsigned char keyboard_map[128] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',
