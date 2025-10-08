@@ -7,6 +7,7 @@
 const unsigned int multiboot_header[]  __attribute__((section(".multiboot"))) = {MULTIBOOT2_HEADER_MAGIC, 0, 16, -(16+MULTIBOOT2_HEADER_MAGIC), 0, 12};
 
 void putc(int data);
+void keyboard_poll_once(void);
 
 void main() {
     remap_pic();
