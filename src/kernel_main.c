@@ -12,10 +12,11 @@ void main() {
     remap_pic();
     load_gdt();
     init_idt();
-    
-    asm("sti");
-    
-    while(1) {
-        asm("hlt");
+
+    esp_printf(putc, "Polling keyboard for scancodes...\r\n\r\n");
+
+    while (1) {
+        keyboard_poll_once();
+        for (volatile int i = 0; i < 50000; i++) { }  // small pause
     }
 }
