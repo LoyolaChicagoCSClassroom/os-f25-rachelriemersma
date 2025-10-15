@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 #include "rprintf.h"
 #include "interrupt.h"
 #include "page.h"
