@@ -7,7 +7,7 @@
 struct ppage physical_page_array[128];
 
 // Pointer to head of free pages list
-struct ppage *free_physical_pages = NULL;
+struct ppage *free_physical_pages_list = NULL;
 
 // Initialize the free page list
 void init_pfa_list(void) {
@@ -15,7 +15,7 @@ void init_pfa_list(void) {
     void *physical_start = (void *)0x10000000;  // Starting at 256 MB
     
     // Initialize the free list as empty
-    free_physical_pages = NULL;
+    free_physical_pages_list = NULL;
     
     // Loop through each page and add to free list
     for (int i = 0; i < 128; i++) {
@@ -23,20 +23,20 @@ void init_pfa_list(void) {
         physical_page_array[i].physical_addr = physical_start + (i * PAGE_SIZE);
         
         // Link into free list at the beginning
-        physical_page_array[i].next = free_physical_pages;
+        physical_page_array[i].next = free_physical_pages_list;
         physical_page_array[i].prev = NULL;
         
-        if (free_physical_pages != NULL) {
-            free_physical_pages->prev = &physical_page_array[i];
+        if (free_physical_pages_list != NULL) {
+            free_physical_pages_list->prev = &physical_page_array[i];
         }
         
-        free_physical_pages = &physical_page_array[i];
+        free_physical_pages_list = &physical_page_array[i];
     }
 }
 
 // Allocate npages from the free list
 struct ppage *allocate_physical_pages(unsigned int npages) {
-    if (npages == 0 || free_physical_pages == NULL) {
+    if (npages == 0 || free_physical_pages_list == NULL) {
         return NULL;
     }
     
@@ -45,21 +45,21 @@ struct ppage *allocate_physical_pages(unsigned int npages) {
     
     // Allocate the requested number of pages
     for (unsigned int i = 0; i < npages; i++) {
-        if (free_physical_pages == NULL) {
+        if (free_physical_pages_list == NULL) {
             // Not enough pages available
             // Return what we allocated back to free list
             if (allocated_list != NULL) {
-                free_physical_pages(allocated_list);
+                free_physical_pages_list(allocated_list);
             }
             return NULL;
         }
         
         // Remove first page from free list
-        current = free_physical_pages;
-        free_physical_pages = free_physical_pages->next;
+        current = free_physical_pages_list;
+        free_physical_pages_list = free_physical_pages_list->next;
         
-        if (free_physical_pages != NULL) {
-            free_physical_pages->prev = NULL;
+        if (free_physical_pages_list != NULL) {
+            free_physical_pages_list->prev = NULL;
         }
         
         // Add to allocated list
@@ -77,7 +77,7 @@ struct ppage *allocate_physical_pages(unsigned int npages) {
 }
 
 // Free pages back to the free list
-void free_physical_pages(struct ppage *ppage_list) {
+void free_physical_pages_list(struct ppage *ppage_list) {
     if (ppage_list == NULL) {
         return;
     }
@@ -90,14 +90,14 @@ void free_physical_pages(struct ppage *ppage_list) {
         next = current->next;
         
         // Add this page back to free list
-        current->next = free_physical_pages;
+        current->next = free_physical_pages_list;
         current->prev = NULL;
         
-        if (free_physical_pages != NULL) {
-            free_physical_pages->prev = current;
+        if (free_physical_pages_list != NULL) {
+            free_physical_pages_list->prev = current;
         }
         
-        free_physical_pages = current;
+        free_physical_pages_list = current;
         current = next;
     }
 }
