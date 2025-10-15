@@ -49,7 +49,7 @@ struct ppage *allocate_physical_pages(unsigned int npages) {
             // Not enough pages available
             // Return what we allocated back to free list
             if (allocated_list != NULL) {
-                free_physical_pages_list(allocated_list);
+                free_physical_pages(allocated_list);
             }
             return NULL;
         }
@@ -77,7 +77,7 @@ struct ppage *allocate_physical_pages(unsigned int npages) {
 }
 
 // Free pages back to the free list
-void free_physical_pages_list(struct ppage *ppage_list) {
+void free_physical_pages(struct ppage *ppage_list) {
     if (ppage_list == NULL) {
         return;
     }
