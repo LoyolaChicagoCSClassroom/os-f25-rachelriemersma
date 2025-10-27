@@ -28,6 +28,7 @@ OBJS = \
 	interrupt.o \
 	keyboard.o \
 	page.o \
+	paging.o \
 
 # Make sure to keep a blank line here after OBJS list
 
