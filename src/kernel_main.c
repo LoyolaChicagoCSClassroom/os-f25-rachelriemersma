@@ -4,6 +4,7 @@
 #include "interrupt.h"
 #include "page.h"
 #include "paging.h"
+#include "fat.h"
 
 #define MULTIBOOT2_HEADER_MAGIC         0xe85250d6
 
@@ -60,6 +61,26 @@ void main() {
     enable_paging();
     
     esp_printf(putc, "Paging enabled!\r\n");
+
+    esp_printf(putc, "\r\nTesting FAT filesystem...\r\n");
+
+    if (fatInit() == 0) {
+        esp_printf(putc, "FAT init successful!\r\n");
+        
+        
+        struct file *f = fatOpen("TEST.TXT");
+        if (f != NULL) {
+            esp_printf(putc, "Found TEST.TXT, size: %d bytes\r\n", f->rde.file_size);
+            
+            char buf[512];
+            int bytes = fatRead(f, buf, 512);
+            buf[bytes] = '\0';  
+            
+            esp_printf(putc, "File contents:\r\n%s\r\n", buf);
+        } else {
+            esp_printf(putc, "TEST.TXT not found\r\n");
+        }
+    }
     
     esp_printf(putc, "\r\nKeyboard test - start typing:\r\n");
     

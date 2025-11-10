@@ -29,6 +29,8 @@ OBJS = \
 	keyboard.o \
 	page.o \
 	paging.o \
+	fat.o \
+	ide.o \
 
 # Make sure to keep a blank line here after OBJS list
 
